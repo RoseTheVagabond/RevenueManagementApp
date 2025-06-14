@@ -6,7 +6,7 @@ namespace RevenueManagementApp.Models;
 public partial class Company
 {
     public int ClientId { get; set; }
-
+    
     public string Krs { get; set; } = null!;
 
     public string Name { get; set; } = null!;
