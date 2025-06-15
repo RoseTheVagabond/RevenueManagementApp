@@ -69,7 +69,7 @@ public partial class MasterContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.Krs)
                 .HasMaxLength(10)
                 .HasColumnName("KRS")
-                .ValueGeneratedNever(); // Not auto-generated, manually set
+                .ValueGeneratedNever();
             
             entity.Property(e => e.Address).HasMaxLength(200).HasColumnName("address");
             entity.Property(e => e.Email).HasMaxLength(100).HasColumnName("email");

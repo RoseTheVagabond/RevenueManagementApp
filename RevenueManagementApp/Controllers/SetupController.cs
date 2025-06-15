@@ -16,8 +16,8 @@ public class SetupController : ControllerBase
         _roleManager = roleManager;
     }
 
-    [HttpPost("create-first-admin")]
-    public async Task<IActionResult> CreateFirstAdmin()
+    [HttpPost("create-admin")]
+    public async Task<IActionResult> CreateAdmin()
     {
         if (await _roleManager.RoleExistsAsync("Admin"))
         {

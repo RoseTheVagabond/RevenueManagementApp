@@ -19,7 +19,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterModel model)
+    public async Task<IActionResult> Register([FromBody] LoginModel model)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -132,5 +132,22 @@ public class AccountController : ControllerBase
             IsEmployee = roles.Contains("Employee"),
             IsAuthenticated = User.Identity.IsAuthenticated
         });
+    }
+
+    [HttpDelete("employee")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteEmployee(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+        var result = await _userManager.DeleteAsync(user);
+        if (result.Succeeded)
+        {
+            return Ok("Employee deleted successfully");
+        }
+        return BadRequest(result.Errors.Select(e => e.Description));
     }
 }
