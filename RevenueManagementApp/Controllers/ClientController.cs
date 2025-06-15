@@ -16,6 +16,48 @@ public class ClientController : ControllerBase
     {
         _service = service;
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAllClients()
+    {
+        try
+        {
+            var clients = await _service.GetAllClientsAsync();
+            return Ok(clients);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);        
+        }
+    }
+
+    [HttpGet("individuals")]
+    public async Task<IActionResult> GetAllIndividuals()
+    {
+        try
+        {
+            var individuals = await _service.GetAllIndividualsAsync();
+            return Ok(individuals);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);        
+        }
+    }
+
+    [HttpGet("companies")]
+    public async Task<IActionResult> GetAllCompanies()
+    {
+        try
+        {
+            var companies = await _service.GetAllCompaniesAsync();
+            return Ok(companies);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);        
+        }
+    }
 
     [HttpPost("individual")]
     public async Task<IActionResult> AddIndividual([FromBody] CreateIndividualDto createIndividualDto)

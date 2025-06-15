@@ -19,17 +19,17 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] LoginModel model)
+    public async Task<IActionResult> Register([FromBody] LoginDTO dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
+        if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
         {
             return BadRequest("Username and password are required");
         }
         
-        var existingUser = await _userManager.FindByNameAsync(model.Username);
+        var existingUser = await _userManager.FindByNameAsync(dto.Username);
         if (existingUser != null)
         {
             return BadRequest("Username already exists");
@@ -37,12 +37,12 @@ public class AccountController : ControllerBase
 
         var user = new IdentityUser
         {
-            UserName = model.Username,
+            UserName = dto.Username,
             Email = null,
             EmailConfirmed = true
         };
 
-        var result = await _userManager.CreateAsync(user, model.Password);
+        var result = await _userManager.CreateAsync(user, dto.Password);
         
         if (result.Succeeded)
         {
@@ -59,17 +59,17 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginModel model)
+    public async Task<IActionResult> Login([FromBody] LoginDTO dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
+        if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
         {
             return BadRequest("Username and password are required");
         }
 
-        var user = await _userManager.FindByNameAsync(model.Username);
+        var user = await _userManager.FindByNameAsync(dto.Username);
         if (user == null)
         {
             return Unauthorized("Invalid username or password");
@@ -77,7 +77,7 @@ public class AccountController : ControllerBase
 
         var result = await _signInManager.PasswordSignInAsync(
             user, 
-            model.Password, 
+            dto.Password, 
             isPersistent: true,
             lockoutOnFailure: true
         );

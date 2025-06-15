@@ -6,6 +6,8 @@ public interface IClientRepository
 {
     Task<Individual?> GetIndividualByPeselAsync(string pesel);
     Task<Company?> GetCompanyByKrsAsync(string krs);
+    Task<List<Individual>> GetAllIndividualsAsync();
+    Task<List<Company>> GetAllCompaniesAsync();
     Task<Individual> AddIndividualAsync(Individual individual);
     Task<Company> AddCompanyAsync(Company company);
     Task<Individual?> UpdateIndividualAsync(Individual individual);

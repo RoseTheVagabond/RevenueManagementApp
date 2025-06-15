@@ -24,6 +24,22 @@ public class ClientRepository : IClientRepository
             .FirstOrDefaultAsync(c => c.Krs == krs);
     }
 
+    public async Task<List<Individual>> GetAllIndividualsAsync()
+    {
+        return await _context.Individuals
+            .Where(i => i.DeletedAt == null)
+            .OrderBy(i => i.LastName)
+            .ThenBy(i => i.FirstName)
+            .ToListAsync();
+    }
+
+    public async Task<List<Company>> GetAllCompaniesAsync()
+    {
+        return await _context.Companies
+            .OrderBy(c => c.Name)
+            .ToListAsync();
+    }
+
     public async Task<Individual> AddIndividualAsync(Individual individual)
     {
         _context.Individuals.Add(individual);

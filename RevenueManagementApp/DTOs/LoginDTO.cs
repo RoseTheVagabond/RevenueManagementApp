@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RevenueManagementApp.Models.auth;
 
-public class LoginModel
+public class LoginDTO
 {
     [Required]
     public string Username { get; set; } = string.Empty;
