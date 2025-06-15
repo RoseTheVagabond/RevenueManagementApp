@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RevenueManagementApp.Models;
+using RevenueManagementApp.DTOs;
 using RevenueManagementApp.Services;
 
 namespace RevenueManagementApp.Controllers;
@@ -18,42 +18,132 @@ public class ClientController : ControllerBase
     }
 
     [HttpPost("individual")]
-    public async Task<IActionResult> AddIndividual([FromBody] Individual individual)
+    public async Task<IActionResult> AddIndividual([FromBody] CreateIndividualDto createIndividualDto)
     {
-        
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var individual = await _service.AddIndividualAsync(createIndividualDto);
+            return Created("", individual);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
     }
     
     [HttpPost("company")]
-    public async Task<IActionResult> AddCompany([FromBody] Company company)
+    public async Task<IActionResult> AddCompany([FromBody] CreateCompanyDto createCompanyDto)
     {
-        
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var company = await _service.AddCompanyAsync(createCompanyDto);
+            return Created("", company);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
     }
     
     [Authorize(Roles = "Admin")]
     [HttpPatch("individual")]
-    public async Task<IActionResult> UpdateIndividual([FromBody] Individual individual)
+    public async Task<IActionResult> UpdateIndividual([FromBody] UpdateIndividualDto updateIndividualDto)
     {
-        
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var individual = await _service.UpdateIndividualAsync(updateIndividualDto);
+            return Ok(individual);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);        }
     }
     
     [Authorize(Roles = "Admin")]
     [HttpPatch("company")]
-    public async Task<IActionResult> UpdateCompany([FromBody] Company company)
+    public async Task<IActionResult> UpdateCompany([FromBody] UpdateCompanyDto updateCompanyDto)
     {
-        
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var company = await _service.UpdateCompanyAsync(updateCompanyDto);
+            return Ok(company);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);        }
     }
     
     [Authorize(Roles = "Admin")]
     [HttpDelete("individual")]
-    public async Task<IActionResult> DeleteIndividual([FromBody] string pesel)
+    public async Task<IActionResult> DeleteIndividual(string pesel)
     {
-        
+        try
+        {
+            if (string.IsNullOrEmpty(pesel))
+            {
+                return BadRequest(new { message = "PESEL is required." });
+            }
+
+            if (pesel.Length != 11)
+            {
+                return BadRequest(new { message = "PESEL must be exactly 11 characters long." });
+            }
+
+            var result = await _service.DeleteIndividualAsync(pesel);
+            if (result)
+            {
+                return Ok(new { message = "Individual has been successfully marked as deleted." });
+            }
+            return StatusCode(500, "Individual could not be deleted.");        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);        }
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpPost("company")]
-    public async Task<IActionResult> DeleteCompany([FromBody] string krs)
+    [HttpDelete("company")]
+    public async Task<IActionResult> DeleteCompany(string krs)
     {
-        return BadRequest("Company cannot be deleted from the database");
+        return BadRequest(new { message = "Company cannot be deleted from the database" });
     }
 }
