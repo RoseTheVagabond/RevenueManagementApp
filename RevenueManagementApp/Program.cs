@@ -22,6 +22,10 @@ public class Program
                 options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = false;
                 
+                options.User.RequireUniqueEmail = false;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedAccount = false;
+                
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5; 
                 options.Lockout.AllowedForNewUsers = true;
@@ -33,11 +37,22 @@ public class Program
         
         builder.Services.ConfigureApplicationCookie(options => {
             options.Cookie.HttpOnly = true; 
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(30); 
-            options.LoginPath = "/Account/Login"; 
-            options.LogoutPath = "/Account/Logout"; 
-            options.AccessDeniedPath = "/Account/AccessDenied"; 
+            options.ExpireTimeSpan = TimeSpan.FromHours(8); // 8 hour session
             options.SlidingExpiration = true;
+            
+            // Return 401/403 instead of redirects for API
+            options.Events.OnRedirectToLogin = context =>
+            {
+                context.Response.StatusCode = 401;
+                context.Response.Headers.Add("Content-Type", "application/json");
+                return context.Response.WriteAsync("{\"error\":\"Not authenticated\"}");
+            };
+            options.Events.OnRedirectToAccessDenied = context =>
+            {
+                context.Response.StatusCode = 403;
+                context.Response.Headers.Add("Content-Type", "application/json");
+                return context.Response.WriteAsync("{\"error\":\"Access denied\"}");
+            };
         });
 
         builder.Services.AddControllers();
