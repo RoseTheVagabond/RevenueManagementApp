@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RevenueManagementApp.Models;
+using RevenueManagementApp.Repositories;
+using RevenueManagementApp.Services;
 
 namespace RevenueManagementApp;
 
@@ -40,7 +42,6 @@ public class Program
             options.ExpireTimeSpan = TimeSpan.FromHours(8); // 8 hour session
             options.SlidingExpiration = true;
             
-            // Return 401/403 instead of redirects for API
             options.Events.OnRedirectToLogin = context =>
             {
                 context.Response.StatusCode = 401;
@@ -56,7 +57,8 @@ public class Program
         });
 
         builder.Services.AddControllers();
-
+        builder.Services.AddScoped<IClientRepository, ClientRepository>();
+        builder.Services.AddScoped<IClientService, ClientService>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
