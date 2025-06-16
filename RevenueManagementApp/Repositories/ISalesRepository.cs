@@ -16,4 +16,7 @@ public interface ISalesRepository
     Task<Software?> GetSoftwareByIdAsync(int id);
     Task<List<Software>> GetAllSoftwareAsync();
     Task<bool> HasActiveSubscriptionForSoftwareAsync(string? pesel, string? krs, int softwareId);
+    Task<decimal> GetCurrentRevenueAsync(int? softwareId = null);
+    Task<decimal> GetPredictedRevenueAsync(int? softwareId = null);
+    Task<(int total, int paid, int unpaid)> GetContractStatsAsync(int? softwareId = null);
 }

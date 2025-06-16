@@ -114,4 +114,53 @@ public class SalesRepository : ISalesRepository
                 c.SoftwareDeadline > now &&
                 c.IsSigned == true);
     }
+    
+    public async Task<decimal> GetCurrentRevenueAsync(int? softwareId = null)
+    {
+        var query = _context.Contracts
+            .Where(c => c.IsPaid == true && c.IsSigned == true);
+    
+        if (softwareId.HasValue)
+        {
+            query = query.Where(c => c.SoftwareId == softwareId.Value);
+        }
+    
+        return await query.SumAsync(c => c.Paid);
+    }
+
+    public async Task<decimal> GetPredictedRevenueAsync(int? softwareId = null)
+    {
+        var query = _context.Contracts.AsQueryable();
+    
+        if (softwareId.HasValue)
+        {
+            query = query.Where(c => c.SoftwareId == softwareId.Value);
+        }
+        
+        var currentRevenue = await query
+            .Where(c => c.IsPaid == true && c.IsSigned == true)
+            .SumAsync(c => c.Paid);
+        
+        var unpaidRevenue = await query
+            .Where(c => c.IsPaid == false && c.End > DateTime.UtcNow) // Still in payment period
+            .SumAsync(c => c.ToPay);
+    
+        return currentRevenue + unpaidRevenue;
+    }
+
+    public async Task<(int total, int paid, int unpaid)> GetContractStatsAsync(int? softwareId = null)
+    {
+        var query = _context.Contracts.AsQueryable();
+    
+        if (softwareId.HasValue)
+        {
+            query = query.Where(c => c.SoftwareId == softwareId.Value);
+        }
+    
+        var total = await query.CountAsync();
+        var paid = await query.CountAsync(c => c.IsPaid == true);
+        var unpaid = total - paid;
+    
+        return (total, paid, unpaid);
+    }
 }

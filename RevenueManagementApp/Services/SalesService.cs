@@ -1,3 +1,4 @@
+using System.Text.Json;
 using RevenueManagementApp.DTOs;
 using RevenueManagementApp.Models;
 using RevenueManagementApp.Repositories;
@@ -229,5 +230,68 @@ public class SalesService : ISalesService
                 Name = s.Cathegory.Name
             }
         }).ToList();
+    }
+    
+    public async Task<RevenueResponseDTO> CalculateRevenueAsync(RevenueRequestDTO request)
+    {
+        var currentRevenue = await _salesRepository.GetCurrentRevenueAsync(request.SoftwareId);
+        var predictedRevenue = await _salesRepository.GetPredictedRevenueAsync(request.SoftwareId);
+        var (total, paid, unpaid) = await _salesRepository.GetContractStatsAsync(request.SoftwareId);
+    
+        var exchangeRate = 1.0m;
+        if (!string.IsNullOrEmpty(request.Currency) && request.Currency.ToUpper() != "PLN")
+        {
+            exchangeRate = await GetExchangeRateAsync(request.Currency);
+        }
+    
+        string? softwareName = null;
+        if (request.SoftwareId.HasValue)
+        {
+            var software = await _salesRepository.GetSoftwareByIdAsync(request.SoftwareId.Value);
+            softwareName = software?.Name;
+        }
+    
+        return new RevenueResponseDTO
+        {
+            CurrentRevenue = currentRevenue * exchangeRate,      // FIXED: Multiply instead of divide
+            PredictedRevenue = predictedRevenue * exchangeRate,  // FIXED: Multiply instead of divide
+            Currency = request.Currency?.ToUpper() ?? "PLN",
+            ExchangeRate = exchangeRate,
+            TotalContracts = total,
+            PaidContracts = paid,
+            UnpaidContracts = unpaid,
+            SoftwareName = softwareName
+        };
+    }
+
+    public async Task<decimal> GetExchangeRateAsync(string targetCurrency)
+    {
+        try
+        {
+            using var httpClient = new HttpClient();
+        
+            var response = await httpClient.GetStringAsync($"https://api.exchangerate-api.com/v4/latest/PLN");
+        
+            var jsonDocument = JsonDocument.Parse(response);
+            var rates = jsonDocument.RootElement.GetProperty("rates");
+        
+            if (rates.TryGetProperty(targetCurrency.ToUpper(), out var rateElement))
+            {
+                return rateElement.GetDecimal();
+            }
+        
+            throw new ArgumentException($"Currency {targetCurrency} not supported.");
+        }
+        catch (Exception)
+        {
+        
+            return targetCurrency.ToUpper() switch
+        {   
+                "USD" => 0.25m,  // 1 PLN = 0.25 USD
+                "EUR" => 0.23m,  // 1 PLN = 0.23 EUR  
+            "   GBP" => 0.20m,  // 1 PLN = 0.20 GBP
+                _ => throw new ArgumentException($"Currency {targetCurrency} not supported.")
+            };
+        }
     }
 }
