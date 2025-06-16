@@ -14,21 +14,21 @@ public partial class Contract
     [StringLength(10)]
     public string? CompanyKrs { get; set; }
 
-    public int? SoftwareId { get; set; }
+    public int SoftwareId { get; set; }
     public int? DiscountId { get; set; }
 
-    public DateTime? Start { get; set; }
-    public DateTime? End { get; set; }
-    public DateTime? SoftwareDeadline { get; set; }
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; }
+    public DateTime SoftwareDeadline { get; set; }
 
-    public bool? IsSigned { get; set; }
-    public bool? IsPaid { get; set; }
-
-    [Range(0, double.MaxValue)]
-    public decimal? ToPay { get; set; }
+    public bool IsSigned { get; set; }
+    public bool IsPaid { get; set; }
 
     [Range(0, double.MaxValue)]
-    public decimal? Paid { get; set; }
+    public decimal ToPay { get; set; }
+
+    [Range(0, double.MaxValue)]
+    public decimal Paid { get; set; }
     
     public virtual Individual? Individual { get; set; }
     public virtual Company? Company { get; set; }

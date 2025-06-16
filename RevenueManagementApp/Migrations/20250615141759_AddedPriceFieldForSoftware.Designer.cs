@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RevenueManagementApp.Models;
 
@@ -11,9 +12,11 @@ using RevenueManagementApp.Models;
 namespace RevenueManagementApp.Migrations
 {
     [DbContext(typeof(MasterContext))]
-    partial class MasterContextModelSnapshot : ModelSnapshot
+    [Migration("20250615141759_AddedPriceFieldForSoftware")]
+    partial class AddedPriceFieldForSoftware
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -310,7 +313,7 @@ namespace RevenueManagementApp.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Discount_id");
 
-                    b.Property<DateTime>("End")
+                    b.Property<DateTime?>("End")
                         .HasColumnType("datetime")
                         .HasColumnName("end");
 
@@ -319,31 +322,31 @@ namespace RevenueManagementApp.Migrations
                         .HasColumnType("nvarchar(11)")
                         .HasColumnName("Individual_PESEL");
 
-                    b.Property<bool>("IsPaid")
+                    b.Property<bool?>("IsPaid")
                         .HasColumnType("bit")
                         .HasColumnName("isPaid");
 
-                    b.Property<bool>("IsSigned")
+                    b.Property<bool?>("IsSigned")
                         .HasColumnType("bit")
                         .HasColumnName("isSigned");
 
-                    b.Property<decimal>("Paid")
+                    b.Property<decimal?>("Paid")
                         .HasColumnType("decimal(8, 2)")
                         .HasColumnName("paid");
 
-                    b.Property<DateTime>("SoftwareDeadline")
+                    b.Property<DateTime?>("SoftwareDeadline")
                         .HasColumnType("datetime")
                         .HasColumnName("softwareDeadline");
 
-                    b.Property<int>("SoftwareId")
+                    b.Property<int?>("SoftwareId")
                         .HasColumnType("int")
                         .HasColumnName("Software_id");
 
-                    b.Property<DateTime>("Start")
+                    b.Property<DateTime?>("Start")
                         .HasColumnType("datetime")
                         .HasColumnName("start");
 
-                    b.Property<decimal>("ToPay")
+                    b.Property<decimal?>("ToPay")
                         .HasColumnType("decimal(8, 2)")
                         .HasColumnName("toPay");
 
@@ -485,7 +488,7 @@ namespace RevenueManagementApp.Migrations
                             CurrentVersion = "2024",
                             Description = "Complete office productivity suite",
                             Name = "Office Suite Pro",
-                            Price = 4999.99m
+                            Price = 0m
                         },
                         new
                         {
@@ -494,7 +497,7 @@ namespace RevenueManagementApp.Migrations
                             CurrentVersion = "5.1.2",
                             Description = "Advanced 3D game development engine",
                             Name = "Game Engine X",
-                            Price = 7999.99m
+                            Price = 0m
                         },
                         new
                         {
@@ -503,7 +506,7 @@ namespace RevenueManagementApp.Migrations
                             CurrentVersion = "12.3",
                             Description = "Professional graphic design software",
                             Name = "Design Studio",
-                            Price = 2999.99m
+                            Price = 0m
                         },
                         new
                         {
@@ -512,7 +515,7 @@ namespace RevenueManagementApp.Migrations
                             CurrentVersion = "4.8.1",
                             Description = "Integrated development environment",
                             Name = "Code Builder",
-                            Price = 3499.99m
+                            Price = 0m
                         },
                         new
                         {
@@ -521,7 +524,7 @@ namespace RevenueManagementApp.Migrations
                             CurrentVersion = "3.5.1",
                             Description = "Design templates library",
                             Name = "DesignMaster",
-                            Price = 1999.99m
+                            Price = 0m
                         },
                         new
                         {
@@ -530,7 +533,7 @@ namespace RevenueManagementApp.Migrations
                             CurrentVersion = "2.1.4",
                             Description = "Online management system",
                             Name = "BusinessPlatform",
-                            Price = 5999.99m
+                            Price = 0m
                         },
                         new
                         {
@@ -539,7 +542,7 @@ namespace RevenueManagementApp.Migrations
                             CurrentVersion = "6.0.2",
                             Description = "Advanced multimedia player",
                             Name = "MediaPlayer Pro",
-                            Price = 1499.99m
+                            Price = 0m
                         });
                 });
 
@@ -614,7 +617,6 @@ namespace RevenueManagementApp.Migrations
                     b.HasOne("RevenueManagementApp.Models.Software", "Software")
                         .WithMany("Contracts")
                         .HasForeignKey("SoftwareId")
-                        .IsRequired()
                         .HasConstraintName("Contract_Software");
 
                     b.Navigation("Company");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RevenueManagementApp.Models;
 
@@ -14,6 +15,9 @@ public partial class Software
     public string CurrentVersion { get; set; } = null!;
 
     public int CathegoryId { get; set; }
+
+    [Range(0, 999999)]
+    public decimal Price { get; set; }
 
     public virtual Cathegory Cathegory { get; set; } = null!;
 

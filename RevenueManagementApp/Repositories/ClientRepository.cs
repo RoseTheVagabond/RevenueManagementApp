@@ -107,7 +107,7 @@ public class ClientRepository : IClientRepository
         if (individual == null)
             return false;
 
-        individual.DeletedAt = DateTime.UtcNow;
+        individual.DeletedAt = DateTime.Now;
         await _context.SaveChangesAsync();
         return true;
     }

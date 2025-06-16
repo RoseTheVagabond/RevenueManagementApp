@@ -38,7 +38,6 @@ public class ClientService : IClientService
 
     public async Task<Individual> AddIndividualAsync(CreateIndividualDto createIndividualDto)
     {
-        // Check if individual already exists
         if (await _clientRepository.IndividualExistsAsync(createIndividualDto.Pesel))
         {
             throw new InvalidOperationException($"Individual with PESEL {createIndividualDto.Pesel} already exists.");
@@ -59,7 +58,6 @@ public class ClientService : IClientService
 
     public async Task<Company> AddCompanyAsync(CreateCompanyDto createCompanyDto)
     {
-        // Check if company already exists
         if (await _clientRepository.CompanyExistsAsync(createCompanyDto.Krs))
         {
             throw new InvalidOperationException($"Company with KRS {createCompanyDto.Krs} already exists.");
@@ -79,7 +77,6 @@ public class ClientService : IClientService
 
     public async Task<Individual?> UpdateIndividualAsync(UpdateIndividualDto updateIndividualDto)
     {
-        // Check if individual exists
         var existingIndividual = await _clientRepository.GetIndividualByPeselAsync(updateIndividualDto.Pesel);
         if (existingIndividual == null)
         {
@@ -101,7 +98,6 @@ public class ClientService : IClientService
 
     public async Task<Company?> UpdateCompanyAsync(UpdateCompanyDto updateCompanyDto)
     {
-        // Check if company exists
         var existingCompany = await _clientRepository.GetCompanyByKrsAsync(updateCompanyDto.Krs);
         if (existingCompany == null)
         {
@@ -122,7 +118,6 @@ public class ClientService : IClientService
 
     public async Task<bool> DeleteIndividualAsync(string pesel)
     {
-        // Check if individual exists
         var existingIndividual = await _clientRepository.GetIndividualByPeselAsync(pesel);
         if (existingIndividual == null)
         {

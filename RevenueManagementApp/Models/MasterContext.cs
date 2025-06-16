@@ -143,11 +143,28 @@ public partial class MasterContext : IdentityDbContext<IdentityUser>
             entity.Property(e => e.CurrentVersion).HasMaxLength(5).HasColumnName("currentVersion");
             entity.Property(e => e.Description).HasMaxLength(200).HasColumnName("description");
             entity.Property(e => e.Name).HasMaxLength(50).HasColumnName("name");
+            entity.Property(e => e.Price).HasColumnType("decimal(8, 2)").HasColumnName("price");
 
             entity.HasOne(d => d.Cathegory).WithMany(p => p.Softwares)
                 .HasForeignKey(d => d.CathegoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Software_Cathegory");
         });
+        
+        modelBuilder.Entity<Cathegory>().HasData(
+            new Cathegory { Id = 1, Name = "Business Software" },
+            new Cathegory { Id = 2, Name = "Gaming" },
+            new Cathegory { Id = 3, Name = "Design" }
+        );
+
+        modelBuilder.Entity<Software>().HasData(
+            new Software { Id = 1, Name = "Office Suite Pro", Description = "Complete office productivity suite", CurrentVersion = "2024", CathegoryId = 1, Price = 4999.99m },
+            new Software { Id = 2, Name = "Game Engine X", Description = "Advanced 3D game development engine", CurrentVersion = "5.1.2", CathegoryId = 2, Price = 7999.99m },
+            new Software { Id = 3, Name = "Design Studio", Description = "Professional graphic design software", CurrentVersion = "12.3", CathegoryId = 3, Price = 2999.99m },
+            new Software { Id = 4, Name = "Code Builder", Description = "Integrated development environment", CurrentVersion = "4.8.1", CathegoryId = 1, Price = 3499.99m },
+            new Software { Id = 6, Name = "DesignMaster", Description = "Design templates library", CurrentVersion = "3.5.1", CathegoryId = 3, Price = 1999.99m },
+            new Software { Id = 7, Name = "BusinessPlatform", Description = "Online management system", CurrentVersion = "2.1.4", CathegoryId = 1, Price = 5999.99m },
+            new Software { Id = 8, Name = "MediaPlayer Pro", Description = "Advanced multimedia player", CurrentVersion = "6.0.2", CathegoryId = 2, Price = 1499.99m }
+        );
     }
 }
