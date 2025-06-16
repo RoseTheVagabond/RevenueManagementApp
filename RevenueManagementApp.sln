@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueManagementApp", "RevenueManagementApp\RevenueManagementApp.csproj", "{D7F4E6E9-3E3C-4278-A05D-B3C3DB1AE3BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueManagementAppTests", "RevenueManagementAppTests\RevenueManagementAppTests.csproj", "{CC16B14C-A83F-47F2-B1B2-0B4EC6E6F182}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevenueManagementTests", "RevenueManagementTests\RevenueManagementTests.csproj", "{82B99BFA-591D-448E-911C-746322E3FF6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		{D7F4E6E9-3E3C-4278-A05D-B3C3DB1AE3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7F4E6E9-3E3C-4278-A05D-B3C3DB1AE3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7F4E6E9-3E3C-4278-A05D-B3C3DB1AE3BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC16B14C-A83F-47F2-B1B2-0B4EC6E6F182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC16B14C-A83F-47F2-B1B2-0B4EC6E6F182}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC16B14C-A83F-47F2-B1B2-0B4EC6E6F182}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC16B14C-A83F-47F2-B1B2-0B4EC6E6F182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82B99BFA-591D-448E-911C-746322E3FF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82B99BFA-591D-448E-911C-746322E3FF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82B99BFA-591D-448E-911C-746322E3FF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82B99BFA-591D-448E-911C-746322E3FF6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

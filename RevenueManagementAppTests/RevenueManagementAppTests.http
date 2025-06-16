@@ -1,6 +1,0 @@
-@RevenueManagementAppTests_HostAddress = http://localhost:5275
-
-GET {{RevenueManagementAppTests_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

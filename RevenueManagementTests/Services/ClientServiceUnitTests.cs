@@ -295,7 +295,7 @@ public class ClientServiceUnitTests
             Email = "john.doe@example.com",
             PhoneNumber = "123456789"
         };
-        
+    
         var company = new Company
         {
             Krs = "1234567890",
@@ -313,9 +313,25 @@ public class ClientServiceUnitTests
 
         // Assert
         Assert.NotNull(result);
-        var resultObj = (dynamic)result;
-        Assert.Equal(1, ((List<Individual>)resultObj.Individuals).Count);
-        Assert.Equal(1, ((List<Company>)resultObj.Companies).Count);
-        Assert.Equal(2, (int)resultObj.TotalClients);
+    
+        // Use reflection to access properties of the anonymous type
+        var resultType = result.GetType();
+        var individualsProperty = resultType.GetProperty("Individuals");
+        var companiesProperty = resultType.GetProperty("Companies");
+        var totalClientsProperty = resultType.GetProperty("TotalClients");
+    
+        Assert.NotNull(individualsProperty);
+        Assert.NotNull(companiesProperty);
+        Assert.NotNull(totalClientsProperty);
+    
+        var individuals = individualsProperty.GetValue(result) as List<Individual>;
+        var companies = companiesProperty.GetValue(result) as List<Company>;
+        var totalClients = totalClientsProperty.GetValue(result);
+    
+        Assert.NotNull(individuals);
+        Assert.NotNull(companies);
+        Assert.Equal(1, individuals.Count);
+        Assert.Equal(1, companies.Count);
+        Assert.Equal(2, totalClients);
     }
 }
