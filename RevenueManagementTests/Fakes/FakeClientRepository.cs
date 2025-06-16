@@ -109,8 +109,7 @@ public class FakeClientRepository : IClientRepository
         var exists = _companies.Any(c => c.Krs == krs);
         return Task.FromResult(exists);
     }
-
-    // Helper methods for testing
+    
     public void AddTestIndividual(Individual individual)
     {
         _individuals.Add(individual);

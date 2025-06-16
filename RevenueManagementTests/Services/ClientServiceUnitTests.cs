@@ -20,7 +20,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task AddIndividualAsync_ShouldAddIndividual_WhenValidDataProvided()
     {
-        // Arrange
         var createIndividualDto = new CreateIndividualDto
         {
             Pesel = "12345678901",
@@ -30,11 +29,9 @@ public class ClientServiceUnitTests
             Email = "john.doe@example.com",
             PhoneNumber = "123456789"
         };
-
-        // Act
+        
         var result = await _clientService.AddIndividualAsync(createIndividualDto);
-
-        // Assert
+        
         Assert.NotNull(result);
         Assert.Equal(createIndividualDto.Pesel, result.Pesel);
         Assert.Equal(createIndividualDto.FirstName, result.FirstName);
@@ -47,7 +44,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task AddIndividualAsync_ShouldThrowException_WhenIndividualAlreadyExists()
     {
-        // Arrange
         var existingIndividual = new Individual
         {
             Pesel = "12345678901",
@@ -68,8 +64,7 @@ public class ClientServiceUnitTests
             Email = "john.doe@example.com",
             PhoneNumber = "123456789"
         };
-
-        // Act & Assert
+        
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
             () => _clientService.AddIndividualAsync(createIndividualDto));
         
@@ -79,7 +74,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task AddCompanyAsync_ShouldAddCompany_WhenValidDataProvided()
     {
-        // Arrange
         var createCompanyDto = new CreateCompanyDto
         {
             Krs = "1234567890",
@@ -88,11 +82,9 @@ public class ClientServiceUnitTests
             Email = "test@company.com",
             PhoneNumber = "123456789"
         };
-
-        // Act
+        
         var result = await _clientService.AddCompanyAsync(createCompanyDto);
-
-        // Assert
+        
         Assert.NotNull(result);
         Assert.Equal(createCompanyDto.Krs, result.Krs);
         Assert.Equal(createCompanyDto.Name, result.Name);
@@ -104,7 +96,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task AddCompanyAsync_ShouldThrowException_WhenCompanyAlreadyExists()
     {
-        // Arrange
         var existingCompany = new Company
         {
             Krs = "1234567890",
@@ -123,8 +114,7 @@ public class ClientServiceUnitTests
             Email = "test@company.com",
             PhoneNumber = "123456789"
         };
-
-        // Act & Assert
+        
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
             () => _clientService.AddCompanyAsync(createCompanyDto));
         
@@ -134,7 +124,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task UpdateIndividualAsync_ShouldUpdateIndividual_WhenValidDataProvided()
     {
-        // Arrange
         var existingIndividual = new Individual
         {
             Pesel = "12345678901",
@@ -155,11 +144,9 @@ public class ClientServiceUnitTests
             Email = "johnny.smith@example.com",
             PhoneNumber = "987654321"
         };
-
-        // Act
+        
         var result = await _clientService.UpdateIndividualAsync(updateIndividualDto);
-
-        // Assert
+        
         Assert.NotNull(result);
         Assert.Equal(updateIndividualDto.FirstName, result.FirstName);
         Assert.Equal(updateIndividualDto.LastName, result.LastName);
@@ -171,7 +158,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task UpdateIndividualAsync_ShouldThrowException_WhenIndividualNotFound()
     {
-        // Arrange
         var updateIndividualDto = new UpdateIndividualDto
         {
             Pesel = "99999999999",
@@ -181,8 +167,7 @@ public class ClientServiceUnitTests
             Email = "johnny.smith@example.com",
             PhoneNumber = "987654321"
         };
-
-        // Act & Assert
+        
         var exception = await Assert.ThrowsAsync<KeyNotFoundException>(
             () => _clientService.UpdateIndividualAsync(updateIndividualDto));
         
@@ -192,7 +177,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task UpdateCompanyAsync_ShouldUpdateCompany_WhenValidDataProvided()
     {
-        // Arrange
         var existingCompany = new Company
         {
             Krs = "1234567890",
@@ -211,11 +195,9 @@ public class ClientServiceUnitTests
             Email = "updated@company.com",
             PhoneNumber = "987654321"
         };
-
-        // Act
+        
         var result = await _clientService.UpdateCompanyAsync(updateCompanyDto);
-
-        // Assert
+        
         Assert.NotNull(result);
         Assert.Equal(updateCompanyDto.Name, result.Name);
         Assert.Equal(updateCompanyDto.Address, result.Address);
@@ -226,7 +208,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task UpdateCompanyAsync_ShouldThrowException_WhenCompanyNotFound()
     {
-        // Arrange
         var updateCompanyDto = new UpdateCompanyDto
         {
             Krs = "9999999999",
@@ -235,8 +216,7 @@ public class ClientServiceUnitTests
             Email = "updated@company.com",
             PhoneNumber = "987654321"
         };
-
-        // Act & Assert
+        
         var exception = await Assert.ThrowsAsync<KeyNotFoundException>(
             () => _clientService.UpdateCompanyAsync(updateCompanyDto));
         
@@ -246,7 +226,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task DeleteIndividualAsync_ShouldSoftDeleteIndividual_WhenIndividualExists()
     {
-        // Arrange
         var existingIndividual = new Individual
         {
             Pesel = "12345678901",
@@ -257,25 +236,20 @@ public class ClientServiceUnitTests
             PhoneNumber = "123456789"
         };
         _fakeClientRepository.AddTestIndividual(existingIndividual);
-
-        // Act
+        
         var result = await _clientService.DeleteIndividualAsync("12345678901");
-
-        // Assert
+        
         Assert.True(result);
         
-        // Verify the individual is soft deleted
         var deletedIndividual = await _fakeClientRepository.GetIndividualByPeselAsync("12345678901");
-        Assert.Null(deletedIndividual); // Should return null because DeletedAt is set
+        Assert.Null(deletedIndividual);
     }
 
     [Fact]
     public async Task DeleteIndividualAsync_ShouldThrowException_WhenIndividualNotFound()
     {
-        // Arrange
         var pesel = "99999999999";
-
-        // Act & Assert
+        
         var exception = await Assert.ThrowsAsync<KeyNotFoundException>(
             () => _clientService.DeleteIndividualAsync(pesel));
         
@@ -285,7 +259,6 @@ public class ClientServiceUnitTests
     [Fact]
     public async Task GetAllClientsAsync_ShouldReturnAllClientsData_WhenClientsExist()
     {
-        // Arrange
         var individual = new Individual
         {
             Pesel = "12345678901",
@@ -307,14 +280,11 @@ public class ClientServiceUnitTests
 
         _fakeClientRepository.AddTestIndividual(individual);
         _fakeClientRepository.AddTestCompany(company);
-
-        // Act
+        
         var result = await _clientService.GetAllClientsAsync();
-
-        // Assert
+        
         Assert.NotNull(result);
-    
-        // Use reflection to access properties of the anonymous type
+        
         var resultType = result.GetType();
         var individualsProperty = resultType.GetProperty("Individuals");
         var companiesProperty = resultType.GetProperty("Companies");

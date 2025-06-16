@@ -26,7 +26,7 @@ public class FakeSalesRepository : ISalesRepository
 
     public Task<List<Discount>> GetActiveDiscountsAsync()
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var activeDiscounts = _discounts.Where(d => d.Start <= now && d.End >= now).ToList();
         return Task.FromResult(activeDiscounts);
     }
