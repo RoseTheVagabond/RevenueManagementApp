@@ -175,7 +175,7 @@ public class SalesService : ISalesService
         
         if (paymentDto.PaymentAmount > remainingAmount)
         {
-            throw new ArgumentException($"Payment amount exceeds remaining balance. to pay: ${remainingAmount}.");
+            throw new ArgumentException($"Payment amount exceeds remaining balance. to pay: {remainingAmount} PLN.");
         }
             
         contract.Paid += paymentDto.PaymentAmount;
@@ -190,26 +190,33 @@ public class SalesService : ISalesService
         return contract;
     }
 
-    public async Task<List<ContractDTO>> GetContracts()
+    public async Task<List<ContractResponseDTO>> GetContracts()
     {
         var contracts = await _salesRepository.GetContracts();
-        var contractsDTOs = new List<ContractDTO>();
-    
+        var contractsDTOs = new List<ContractResponseDTO>();
+
         foreach (var contract in contracts)
         {
-            var conDTO = new ContractDTO
+            var conDTO = new ContractResponseDTO
             {
+                Id = contract.Id,
                 IndividualPesel = contract.IndividualPesel,
                 CompanyKrs = contract.CompanyKrs,
                 SoftwareId = contract.SoftwareId,
+                DiscountId = contract.DiscountId,
                 Start = contract.Start,
                 End = contract.End,
+                SoftwareDeadline = contract.SoftwareDeadline,
+                IsSigned = contract.IsSigned,
+                IsPaid = contract.IsPaid,
+                ToPay = contract.ToPay,
+                Paid = contract.Paid,
                 AdditionalSupportYears = (contract.SoftwareDeadline.Year - contract.Start.Year) - 1
             };
-        
+    
             contractsDTOs.Add(conDTO);
         }
-    
+
         return contractsDTOs;
     }
     
@@ -253,8 +260,8 @@ public class SalesService : ISalesService
     
         return new RevenueResponseDTO
         {
-            CurrentRevenue = currentRevenue * exchangeRate,      // FIXED: Multiply instead of divide
-            PredictedRevenue = predictedRevenue * exchangeRate,  // FIXED: Multiply instead of divide
+            CurrentRevenue = Math.Round(currentRevenue * exchangeRate, 2),
+            PredictedRevenue = Math.Round(predictedRevenue * exchangeRate, 2),
             Currency = request.Currency?.ToUpper() ?? "PLN",
             ExchangeRate = exchangeRate,
             TotalContracts = total,
@@ -287,9 +294,9 @@ public class SalesService : ISalesService
         
             return targetCurrency.ToUpper() switch
         {   
-                "USD" => 0.25m,  // 1 PLN = 0.25 USD
-                "EUR" => 0.23m,  // 1 PLN = 0.23 EUR  
-            "   GBP" => 0.20m,  // 1 PLN = 0.20 GBP
+                "USD" => 0.25m,
+                "EUR" => 0.23m,  
+                "GBP" => 0.20m,
                 _ => throw new ArgumentException($"Currency {targetCurrency} not supported.")
             };
         }

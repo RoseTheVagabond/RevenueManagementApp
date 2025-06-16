@@ -10,7 +10,7 @@ public interface ISalesService
     Task<int> CreateContractAsync(ContractDTO contractDto);
     Task<bool> DeleteContractAsync(int contractId);
     Task<Contract> PayForContractAsync(ContractPaymentDTO paymentDto);
-    Task<List<ContractDTO>> GetContracts();
+    Task<List<ContractResponseDTO>> GetContracts();
     Task<List<SoftwareResponseDTO>> GetAllSoftwareAsync();
     Task<RevenueResponseDTO> CalculateRevenueAsync(RevenueRequestDTO request);
     Task<decimal> GetExchangeRateAsync(string targetCurrency);

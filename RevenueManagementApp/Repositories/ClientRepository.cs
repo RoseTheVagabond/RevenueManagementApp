@@ -115,7 +115,7 @@ public class ClientRepository : IClientRepository
     public async Task<bool> IndividualExistsAsync(string pesel)
     {
         return await _context.Individuals
-            .AnyAsync(i => i.Pesel == pesel && i.DeletedAt == null);
+            .AnyAsync(i => i.Pesel == pesel);
     }
 
     public async Task<bool> CompanyExistsAsync(string krs)

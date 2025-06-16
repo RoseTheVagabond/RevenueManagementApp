@@ -107,12 +107,26 @@ public class SalesRepository : ISalesRepository
     public async Task<bool> HasActiveSubscriptionForSoftwareAsync(string? pesel, string? krs, int softwareId)
     {
         var now = DateTime.Now;
-        return await _context.Contracts
-            .AnyAsync(c => 
-                (c.IndividualPesel == pesel || c.CompanyKrs == krs) &&
-                c.SoftwareId == softwareId &&
-                c.SoftwareDeadline > now &&
-                c.IsSigned == true);
+        
+        var query = _context.Contracts
+            .Where(c => c.SoftwareId == softwareId &&
+                        c.SoftwareDeadline > now &&
+                        c.IsSigned == true);
+        
+        if (!string.IsNullOrEmpty(pesel))
+        {
+            query = query.Where(c => c.IndividualPesel == pesel);
+        }
+        else if (!string.IsNullOrEmpty(krs))
+        {
+            query = query.Where(c => c.CompanyKrs == krs);
+        }
+        else
+        {
+            return false;
+        }
+    
+        return await query.AnyAsync();
     }
     
     public async Task<decimal> GetCurrentRevenueAsync(int? softwareId = null)

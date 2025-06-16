@@ -50,8 +50,8 @@ public class SalesController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var contract = await _salesService.CreateContractAsync(contractDto);
-            return Created(string.Empty, contract);
+            var contractId = await _salesService.CreateContractAsync(contractDto);
+            return Created(string.Empty, $"Created contract with id={contractId}");
         }
         catch (ArgumentException ex)
         {

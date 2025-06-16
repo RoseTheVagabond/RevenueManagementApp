@@ -13,16 +13,6 @@ public class ClientService : IClientService
         _clientRepository = clientRepository;
     }
 
-    public async Task<List<Individual>> GetAllIndividualsAsync()
-    {
-        return await _clientRepository.GetAllIndividualsAsync();
-    }
-
-    public async Task<List<Company>> GetAllCompaniesAsync()
-    {
-        return await _clientRepository.GetAllCompaniesAsync();
-    }
-
     public async Task<object> GetAllClientsAsync()
     {
         var individuals = await _clientRepository.GetAllIndividualsAsync();

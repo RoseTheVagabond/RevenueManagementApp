@@ -8,11 +8,11 @@ namespace RevenueManagementApp.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-public class ClientController : ControllerBase
+public class ClientsController : ControllerBase
 {
     private readonly IClientService _service;
 
-    public ClientController(IClientService service)
+    public ClientsController(IClientService service)
     {
         _service = service;
     }
@@ -24,34 +24,6 @@ public class ClientController : ControllerBase
         {
             var clients = await _service.GetAllClientsAsync();
             return Ok(clients);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);        
-        }
-    }
-
-    [HttpGet("individuals")]
-    public async Task<IActionResult> GetAllIndividuals()
-    {
-        try
-        {
-            var individuals = await _service.GetAllIndividualsAsync();
-            return Ok(individuals);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);        
-        }
-    }
-
-    [HttpGet("companies")]
-    public async Task<IActionResult> GetAllCompanies()
-    {
-        try
-        {
-            var companies = await _service.GetAllCompaniesAsync();
-            return Ok(companies);
         }
         catch (Exception ex)
         {

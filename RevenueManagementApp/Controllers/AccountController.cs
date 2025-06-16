@@ -111,43 +111,4 @@ public class AccountController : ControllerBase
         await _signInManager.SignOutAsync();
         return Ok(new { Message = "Logged out successfully" });
     }
-    
-    [HttpGet("me")]
-    [Authorize]
-    public async Task<IActionResult> GetCurrentUser()
-    {
-        var username = User.Identity.Name;
-        var user = await _userManager.FindByNameAsync(username);
-        
-        if (user == null)
-            return NotFound("User not found");
-
-        var roles = await _userManager.GetRolesAsync(user);
-
-        return Ok(new
-        {
-            Username = user.UserName,
-            Roles = roles,
-            IsAdmin = roles.Contains("Admin"),
-            IsEmployee = roles.Contains("Employee"),
-            IsAuthenticated = User.Identity.IsAuthenticated
-        });
-    }
-
-    [HttpDelete("employee")]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeleteEmployee(string username)
-    {
-        var user = await _userManager.FindByNameAsync(username);
-        if (user == null)
-        {
-            return NotFound("User not found");
-        }
-        var result = await _userManager.DeleteAsync(user);
-        if (result.Succeeded)
-        {
-            return Ok("Employee deleted successfully");
-        }
-        return BadRequest(result.Errors.Select(e => e.Description));
-    }
 }
