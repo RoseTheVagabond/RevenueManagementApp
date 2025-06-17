@@ -25,7 +25,7 @@ public class SalesService : ISalesService
             throw new ArgumentException("Start date must be before end date.");
         }
 
-        if (discountDto.Start < DateTime.UtcNow.Date)
+        if (discountDto.Start < DateTime.Now.Date)
         {
             throw new ArgumentException("Start date cannot be in the past.");
         }

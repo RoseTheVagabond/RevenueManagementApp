@@ -5,3 +5,5 @@ SELECT * FROM AspNetUsers;
 DELETE FROM AspNetUserRoles;
 DELETE FROM AspNetUsers;
 DELETE FROM AspNetRoles;
+
+DELETE FROM Individual WHERE firstName = 'Anna';

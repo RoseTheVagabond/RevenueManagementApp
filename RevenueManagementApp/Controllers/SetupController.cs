@@ -51,7 +51,7 @@ public class SetupController : ControllerBase
             await _userManager.AddToRoleAsync(admin, "Admin");
             return Ok(new 
             { 
-                Message = "First admin created successfully",
+                Message = "Admin created successfully",
                 Username = "admin",
                 Password = "Admin123"
             });
