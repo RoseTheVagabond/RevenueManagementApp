@@ -27,7 +27,7 @@ ASP.NET Core Web API for software sales management with role-based authenticatio
 
 **Entity Relationships:**
 
-![Database Schema](![Database Schema](https://raw.githubusercontent.com/username/RevenueManagementApp/main/images/relationship_diagram.png))
+![Database Schema](![Database Schema](https://raw.githubusercontent.com/RoseTheVagabond/RevenueManagementApp/main/RevenueManagementApp/images/relationship_diagram.png)))
 
 **Key Constraints:**
 - Check constraint: `([Individual_PESEL] IS NOT NULL AND [Company_KRS] IS NULL) OR ([Individual_PESEL] IS NULL AND [Company_KRS] IS NOT NULL)`
