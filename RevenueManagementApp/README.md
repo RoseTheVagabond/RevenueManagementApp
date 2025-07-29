@@ -26,6 +26,7 @@ ASP.NET Core Web API for software sales management with role-based authenticatio
 ## Database Design
 
 **Entity Relationships:**
+
 ![Database Schema](./images/relationship_diagram.png)
 
 **Key Constraints:**
